@@ -3,7 +3,6 @@ from matplotlib.pyplot import text
 import streamlit as st
 import pandas as pd
 import numpy as np
-from turtle import width
 from PIL import Image
 import plotly.express as px
 import plotly.graph_objects as go
