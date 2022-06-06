@@ -105,7 +105,6 @@ elif visualization == 'Analysis':
     df3=df2.pivot_table(index=['Causes name'],values=['Death Numbers'],aggfunc=sum).iloc[[0],[0]].values
  
     st.markdown(f'the most {Cause_select} in a country')
-    st.write(df1)
     fig6 = px.bar(df1,x='Year' , y='Death Numbers' , hover_data=['Year','Entity'],
     
     )
