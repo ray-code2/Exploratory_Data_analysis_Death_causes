@@ -3,17 +3,9 @@ from matplotlib.pyplot import text
 import streamlit as st
 import pandas as pd
 import numpy as np
-from PIL import Image
+from turtle import width
 import plotly.express as px
 import plotly.graph_objects as go
-import time
-from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
-from sklearn.model_selection import train_test_split # Import train_test_split function
-from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
-
-# Membangun aplikasi dashboard
-# image = Image.open("Health.jpeg")
-#st.image(image, width=500)
 
 # Import Dataset
 @st.cache
@@ -23,14 +15,11 @@ def load_data():
 
 df = load_data()
 
-#VARIABEL
-
-visualization = st.sidebar.selectbox('Select visualization',('Home_Navigation','Model_1', 'Model_2', 'Model_3', 'Model_4', 'Model_5','Prediction'))
-
+visualization = st.sidebar.selectbox('Select visualization',('Home_Navigation','Model_1', 'Model_2', 'Model_3', 'Model_4', 'Model_5','Analysis'))
 
 if visualization =='Home_Navigation':
   
-    st.header("Exploratory Data Analysis Causes of Death☠️ - Our World in Data Dataset")
+    st.header("Exploratory Data Analysis Causes of Death☠️ - Our World in Data Dataset With Python")
     
 elif visualization == 'Model_1':
     column_names = ["Entity","Code","Year","Causes name","Causes Full Description","Death Numbers"]
@@ -106,26 +95,22 @@ elif visualization == 'Model_5':
     st.plotly_chart(fig5)
 
 
-elif visualization == 'Prediction':
-    'Select a Country you want to predict :'
+elif visualization == 'Analysis':
+   
     column_names = ["Entity","Code","Year","Causes name","Causes Full Description","Death Numbers"]
     selected_state = df.reindex(columns=column_names)
-    state_select = st.sidebar.selectbox('Select a Country', df['Entity'].unique())
-    selected_state = df[df['Entity'] == state_select]
-    Cause_select = st.sidebar.selectbox('Select Death Cause' , selected_state['Causes name'].sort_values(ascending=True).unique())
+    Cause_select = st.selectbox('Select Death Cause' , selected_state['Causes name'].sort_values(ascending=True).unique())
     selected_cause = selected_state[selected_state['Causes name'] == Cause_select]
     df1 = selected_cause.sort_values(by=['Year'])
     df2 = df1.replace(np.nan,0)
     df3=df2.pivot_table(index=['Causes name'],values=['Death Numbers'],aggfunc=sum).iloc[[0],[0]].values
-    # Memberikan Label Machine learning untuk menentukan Jika angka kematian 
-    # disebabkan oleh penyakit tertentu == 0 maka beri label "0" jika ada beri label "1"
-    label = []
-    for index, row in df2.iterrows():
-        if row["Death Numbers"] == 0:
-            label.append(0)
-        else:
-            label.append(1)
-
-    df2["label"] = label
-
-    st.write(df3)
+ 
+    st.markdown(f'the most {Cause_select} in a country')
+    st.write(df1)
+    fig6 = px.bar(df1,x='Year' , y='Death Numbers' , hover_data=['Year','Entity'],
+    
+    )
+    max_number = max(df1['Death Numbers'])
+    
+    st.title(f'The Most {Cause_select} with the number of deaths :{str(int(max_number))} ')
+    st.plotly_chart(fig6)
